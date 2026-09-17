@@ -12,23 +12,22 @@ A simple student management web application built with MongoDB, Express, React, 
 ## Setup Instructions
 
 ### 1) Configure Environment
-Create a MongoDB database and update the `.env` file at the repository root.
+Copy the example file, then update the new `.env` file with your MongoDB connection string.
 
 ```bash
-MONGODB_URI="your-mongodb-connection-string"
-PORT=5000
+cp .env.example .env
 ```
 
 ### 2) Install Dependencies
 
 ```bash
-# Server dependencies
+# Reproducible server dependencies
 cd server
-npm install
+npm ci
 
-# Client dependencies
+# Reproducible client dependencies
 cd ../client
-npm install
+npm ci
 ```
 
 ### 3) Run the Application
@@ -42,6 +41,29 @@ npm run dev
 ```
 
 Visit `http://localhost:5173` to use the app.
+
+### 4) Verify the Project
+
+```bash
+# Run the API smoke test
+cd server
+npm test
+
+# Build the React client
+cd ../client
+npm run build
+```
+
+The smoke test does not require MongoDB. Running the full API does require a reachable MongoDB instance configured in the root `.env` file.
+
+If npm returns `403 Forbidden`, first confirm that npm is using the public registry:
+
+```bash
+npm config get registry
+npm ping --registry=https://registry.npmjs.org/
+```
+
+The expected registry is `https://registry.npmjs.org/`. A different registry, an expired token in an npm configuration file, or a restricted proxy can cause a 403 before project code runs.
 
 ## API Endpoints
 - `POST /students`
